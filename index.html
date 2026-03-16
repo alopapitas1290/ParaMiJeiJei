@@ -11,6 +11,7 @@
     --rojo-oscuro: #8B0000;
     --rojo-claro: #E8394D;
     --dorado: #D4AF6A;
+    --dorado-claro: #F0D080;
     --crema: #FDF6EE;
     --negro: #0D0D0D;
     --gris: #2A2A2A;
@@ -30,11 +31,62 @@
   #fondo-estatico img { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; filter: grayscale(30%) sepia(20%); }
   #fondo-pattern { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(ellipse at 20% 50%, rgba(139,0,0,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(192,21,42,0.1) 0%, transparent 50%); pointer-events: none; }
 
+  /* ── REPRODUCTOR DE MÚSICA ── */
+  #music-player {
+    position: fixed; bottom: 24px; right: 24px;
+    z-index: 500;
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(13,13,13,0.92);
+    border: 1px solid rgba(192,21,42,0.3);
+    border-radius: 40px;
+    padding: 10px 18px 10px 10px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(192,21,42,0.2);
+    transition: box-shadow 0.3s;
+  }
+  #music-player:hover { box-shadow: 0 8px 40px rgba(192,21,42,0.35); }
+  #music-btn {
+    width: 36px; height: 36px;
+    background: var(--rojo); border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; color: white; transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  #music-btn:hover { background: var(--rojo-claro); }
+  .music-info { display: flex; flex-direction: column; }
+  .music-titulo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 1px;
+    color: var(--texto-claro); white-space: nowrap;
+  }
+  .music-subtitulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem; font-style: italic;
+    color: var(--dorado); opacity: 0.8;
+  }
+  .music-barra {
+    display: flex; align-items: center; gap: 4px;
+    height: 20px;
+  }
+  .music-barra span {
+    display: block; width: 3px;
+    background: var(--rojo-claro); border-radius: 2px;
+    animation: onda 1s ease-in-out infinite;
+    opacity: 0.7;
+  }
+  .music-barra span:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .music-barra span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+  .music-barra span:nth-child(3) { height: 10px; animation-delay: 0.4s; }
+  .music-barra span:nth-child(4) { height: 16px; animation-delay: 0.1s; }
+  .music-barra span:nth-child(5) { height: 8px; animation-delay: 0.3s; }
+  .music-barra.paused span { animation-play-state: paused; opacity: 0.3; }
+  @keyframes onda { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(0.4); } }
+
   /* NAV */
   nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(13,13,13,0.95), transparent); backdrop-filter: blur(4px); }
   .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--dorado); letter-spacing: 2px; }
-  .nav-links { display: flex; gap: 32px; list-style: none; }
-  .nav-links a { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--texto-claro); text-decoration: none; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--texto-claro); text-decoration: none; opacity: 0.7; transition: opacity 0.3s, color 0.3s; }
   .nav-links a:hover { opacity: 1; color: var(--rojo-claro); }
   .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; padding: 4px; }
   .hamburger span { display: block; width: 24px; height: 1.5px; background: var(--texto-claro); }
@@ -73,17 +125,107 @@
   .divider-line { flex: 1; max-width: 200px; height: 1px; background: var(--rojo-oscuro); }
   .divider-icon { color: var(--rojo-claro); font-size: 1.2rem; }
 
-  /* GALERÍA */
-  .galeria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .galeria-item { position: relative; overflow: hidden; border-radius: 4px; aspect-ratio: 3/4; background: rgba(255,255,255,0.04); border: 1px solid rgba(192,21,42,0.15); transition: transform 0.4s ease, box-shadow 0.4s; }
+  /* ── CONTADOR COMPACTO ── */
+  #contador {
+    padding: 28px 40px;
+    max-width: 100%;
+    display: flex; align-items: center;
+    justify-content: center; gap: 0;
+    background: rgba(192,21,42,0.05);
+    border-top: 1px solid rgba(192,21,42,0.1);
+    border-bottom: 1px solid rgba(192,21,42,0.1);
+  }
+  .cnt-label-inicio {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 1rem;
+    color: var(--dorado); opacity: 0.7;
+    margin-right: 24px; white-space: nowrap;
+  }
+  .cnt-grupo {
+    display: flex; align-items: baseline; gap: 4px;
+    margin: 0 12px;
+  }
+  .cnt-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--rojo-claro);
+    line-height: 1; min-width: 2ch; text-align: center;
+  }
+  .cnt-unit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--dorado);
+    opacity: 0.6;
+  }
+  .cnt-sep {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; color: rgba(192,21,42,0.3);
+    margin: 0 4px;
+  }
+
+  /* ── GALERÍA CON MARCOS ELEGANTES ── */
+  .galeria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .galeria-item {
+    position: relative; overflow: visible;
+    border-radius: 2px; aspect-ratio: 3/4;
+    background: rgba(255,255,255,0.04);
+    transition: transform 0.4s ease, box-shadow 0.4s;
+  }
+  /* Marco principal */
+  .galeria-item::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid var(--rojo);
+    border-radius: 2px;
+    z-index: 2;
+    pointer-events: none;
+    transition: border-color 0.4s;
+  }
+  /* Marco dorado exterior */
+  .galeria-item::after {
+    content: '';
+    position: absolute;
+    inset: -9px;
+    border: 1px solid rgba(212,175,106,0.4);
+    border-radius: 2px;
+    z-index: 1;
+    pointer-events: none;
+    transition: border-color 0.4s, inset 0.4s;
+  }
+  /* Esquinas doradas con pseudo en el wrapper */
+  .galeria-item .marco-esquinas {
+    position: absolute; inset: -4px; z-index: 3; pointer-events: none;
+  }
+  .galeria-item .marco-esquinas::before,
+  .galeria-item .marco-esquinas::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--dorado);
+    border-style: solid;
+    transition: width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  .galeria-item .marco-esquinas::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .galeria-item .marco-esquinas::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
   .galeria-item:nth-child(1) { grid-column: 1/2; grid-row: 1/3; aspect-ratio: auto; min-height: 400px; }
   .galeria-item:nth-child(4) { grid-column: 3/4; grid-row: 1/3; aspect-ratio: auto; min-height: 400px; }
   .galeria-item.foto-panoramica-media { grid-column: 1/3; aspect-ratio: 16/7; }
   .galeria-item.foto-panoramica-full  { grid-column: 1/-1; aspect-ratio: 21/7; }
-  .galeria-item:hover { transform: scale(1.02); box-shadow: 0 20px 60px rgba(192,21,42,0.3); z-index: 2; }
-  .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: filter 0.4s; filter: grayscale(20%) sepia(10%); }
-  .galeria-item:hover img { filter: grayscale(0%) sepia(0%); }
-  .galeria-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(139,0,0,0.5) 0%, transparent 60%); opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; padding: 20px; }
+
+  .galeria-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 60px rgba(192,21,42,0.35);
+    z-index: 5;
+  }
+  .galeria-item:hover::before { border-color: var(--rojo-claro); }
+  .galeria-item:hover::after  { border-color: var(--dorado); inset: -12px; }
+  .galeria-item:hover .marco-esquinas::before,
+  .galeria-item:hover .marco-esquinas::after { width: 28px; height: 28px; border-color: var(--dorado-claro); }
+
+  .galeria-foto { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 2px; transition: filter 0.4s; filter: grayscale(15%) sepia(8%); }
+  .galeria-item:hover .galeria-foto { filter: grayscale(0%) sepia(0%); }
+  .galeria-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(139,0,0,0.55) 0%, transparent 55%); opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; padding: 16px; z-index: 2; border-radius: 2px; }
   .galeria-item:hover .galeria-overlay { opacity: 1; }
   .galeria-overlay span { font-family: 'Cormorant Garamond', serif; font-style: italic; color: white; font-size: 0.9rem; }
 
@@ -94,10 +236,49 @@
   .video-wrapper { position: relative; padding-top: 56.25%; background: rgba(139,0,0,0.1); overflow: hidden; }
   .video-wrapper video, .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border: none; }
   .video-info { padding: 24px; }
-  .video-numero { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--rojo-claro); margin-bottom: 8px; }
-  .video-titulo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--crema); margin-bottom: 10px; }
-  .video-desc { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--dorado); line-height: 1.6; opacity: 0.85; }
-  .video-label { display: inline-block; margin-top: 12px; padding: 4px 12px; border: 1px solid rgba(192,21,42,0.4); border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--rojo-claro); }
+  .video-titulo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--crema); margin-bottom: 12px; }
+.video-numero { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--rojo-claro); margin-bottom: 10px; }
+.video-desc { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; color: var(--dorado); line-height: 1.75; opacity: 0.9; }  .video-label { display: inline-block; margin-top: 12px; padding: 4px 12px; border: 1px solid rgba(192,21,42,0.4); border-radius: 20px; font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--rojo-claro); }
+
+  /* RAZONES */
+  .razones-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .razon-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(192,21,42,0.15); border-left: 3px solid var(--rojo); border-radius: 0 8px 8px 0; padding: 24px 20px; position: relative; transition: transform 0.3s, box-shadow 0.3s; }
+  .razon-card:hover { transform: translateX(6px); box-shadow: -4px 0 20px rgba(192,21,42,0.2); }
+  .razon-numero { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: rgba(192,21,42,0.12); position: absolute; top: 10px; right: 16px; line-height: 1; }
+  .razon-texto { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--texto-claro); line-height: 1.7; }
+
+  /* ── CITA DEL DÍA ── */
+  #cita { text-align: center; padding: 60px 40px; max-width: 100%; background: rgba(0,0,0,0.1); }
+  .cita-texto {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-style: italic; color: var(--crema);
+    max-width: 600px; margin: 0 auto 16px;
+    line-height: 1.6; opacity: 0.9;
+  }
+  .cita-autor {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--dorado); opacity: 0.6;
+  }
+  .cita-comilla {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; color: var(--rojo);
+    opacity: 0.2; line-height: 0.5;
+    display: block; margin-bottom: 16px;
+  }
+
+  /* TIMELINE */
+  .timeline-lista { position: relative; max-width: 700px; margin: 0 auto; }
+  .timeline-lista::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, var(--rojo), transparent); transform: translateX(-50%); }
+  .timeline-item { display: flex; gap: 40px; align-items: flex-start; margin-bottom: 48px; position: relative; }
+  .timeline-item:nth-child(odd) { flex-direction: row-reverse; }
+  .timeline-item:nth-child(odd) .timeline-content { text-align: right; }
+  .timeline-punto { width: 14px; height: 14px; background: var(--rojo); border: 2px solid var(--dorado); border-radius: 50%; flex-shrink: 0; margin-top: 6px; position: relative; z-index: 1; }
+  .timeline-content { flex: 1; }
+  .timeline-fecha { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: var(--rojo-claro); margin-bottom: 6px; }
+  .timeline-titulo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--crema); margin-bottom: 6px; }
+  .timeline-desc { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--dorado); opacity: 0.8; line-height: 1.6; }
 
   /* PDF */
   .pdf-container { background: rgba(255,255,255,0.03); border: 1px solid rgba(192,21,42,0.2); border-radius: 8px; overflow: hidden; }
@@ -140,6 +321,39 @@
   .corazones-fila span:nth-child(3) { animation-delay: 0.6s; }
   @keyframes pulsar { 0%,100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 1; } }
 
+  /* FOTOS PIE */
+  .pie-fotos { display: flex; justify-content: center; gap: 20px; margin-top: 50px; flex-wrap: wrap; }
+  .pie-foto-card {
+    position: relative; overflow: visible;
+    width: 140px; border-radius: 2px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .pie-foto-card::before {
+    content: ''; position: absolute; inset: -4px;
+    border: 2px solid var(--rojo); border-radius: 2px;
+    z-index: 2; pointer-events: none; transition: border-color 0.3s;
+  }
+  .pie-foto-card::after {
+    content: ''; position: absolute; inset: -9px;
+    border: 1px solid rgba(212,175,106,0.35); border-radius: 2px;
+    z-index: 1; pointer-events: none;
+  }
+  .pie-foto-card .marco-esquinas::before,
+  .pie-foto-card .marco-esquinas::after {
+    content: ''; position: absolute;
+    width: 14px; height: 14px;
+    border-color: var(--dorado); border-style: solid;
+    z-index: 3;
+  }
+  .pie-foto-card .marco-esquinas { position: absolute; inset: -4px; pointer-events: none; }
+  .pie-foto-card .marco-esquinas::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+  .pie-foto-card .marco-esquinas::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+  .pie-foto-card:hover { transform: scale(1.06); box-shadow: 0 0 40px rgba(192,21,42,0.5); }
+  .pie-foto-card:hover::before { border-color: var(--rojo-claro); }
+  .pie-foto-card img { width: 100%; display: block; border-radius: 2px; filter: sepia(10%); transition: filter 0.3s; }
+  .pie-foto-card:hover img { filter: sepia(0%); }
+  .pie-foto-label { background: var(--rojo); padding: 6px 10px; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: white; border-radius: 0 0 2px 2px; }
+
   /* FOOTER */
   footer { padding: 40px; text-align: center; border-top: 1px solid rgba(192,21,42,0.15); }
   footer p { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.4; }
@@ -152,13 +366,15 @@
   .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
-  /* ── RESPONSIVE ── */
+  /* RESPONSIVE */
   @media (max-width: 900px) {
     .galeria-grid { grid-template-columns: repeat(2, 1fr); }
-    .galeria-item:nth-child(1),
-    .galeria-item:nth-child(4) { grid-column: auto !important; grid-row: auto !important; min-height: unset !important; aspect-ratio: 3/4; }
+    .galeria-item:nth-child(1), .galeria-item:nth-child(4) { grid-column: auto !important; grid-row: auto !important; min-height: unset !important; aspect-ratio: 3/4; }
     .galeria-item.foto-panoramica-media { grid-column: 1/-1 !important; aspect-ratio: 16/7; }
     .galeria-item.foto-panoramica-full  { grid-column: 1/-1 !important; aspect-ratio: 16/7; }
+    .timeline-lista::before { left: 20px; }
+    .timeline-item, .timeline-item:nth-child(odd) { flex-direction: row; }
+    .timeline-item:nth-child(odd) .timeline-content { text-align: left; }
   }
   @media (max-width: 768px) {
     nav { padding: 16px 20px; }
@@ -170,12 +386,17 @@
     .columnas-grid { grid-template-columns: 1fr; gap: 24px; }
     .pdf-header { flex-direction: column; }
     .pdf-viewer { height: 350px; }
+    #contador { flex-wrap: wrap; gap: 8px; padding: 20px; }
+    .cnt-label-inicio { width: 100%; text-align: center; margin: 0 0 8px; }
+    #music-player { bottom: 16px; right: 16px; padding: 8px 14px 8px 8px; }
   }
   @media (max-width: 600px) {
-    .galeria-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .galeria-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
     .galeria-item { grid-column: auto !important; grid-row: auto !important; min-height: unset !important; aspect-ratio: 1/1 !important; }
-    .galeria-item.foto-panoramica-media,
-    .galeria-item.foto-panoramica-full { grid-column: 1/-1 !important; aspect-ratio: 4/3 !important; }
+    .galeria-item.foto-panoramica-media, .galeria-item.foto-panoramica-full { grid-column: 1/-1 !important; aspect-ratio: 4/3 !important; }
+    .razones-grid { grid-template-columns: 1fr; }
+    .pie-fotos { gap: 14px; }
+    .pie-foto-card { width: 110px; }
   }
 </style>
 </head>
@@ -186,11 +407,32 @@
 <div id="fondo-estatico"><!-- <img src="tu-fondo.jpg" alt="fondo"> --></div>
 <div id="fondo-pattern"></div>
 
+<!-- REPRODUCTOR DE MÚSICA -->
+<div id="music-player">
+  <button id="music-btn" onclick="toggleMusic()" title="Reproducir música">▶</button>
+  <div class="music-info">
+    <span class="music-titulo">canción especial</span>
+    <span class="music-subtitulo">para JeiJei</span>
+  </div>
+  <div class="music-barra paused" id="musicBarra">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+</div>
+<!--
+  === CANCIÓN DE FONDO ===
+  Reemplaza src con tu archivo de audio:
+  Formatos soportados: .mp3, .ogg, .wav
+-->
+<audio id="bgMusic" loop>
+  <source src="505.mp3" type="audio/mpeg">
+</audio>
+
 <nav>
   <div class="nav-logo">JeiJei & Alo</div>
   <ul class="nav-links">
     <li><a href="#fotos">Fotos</a></li>
     <li><a href="#videos">Videos</a></li>
+    <li><a href="#razones">Razones</a></li>
     <li><a href="#documento">Documento</a></li>
     <li><a href="#nosotros">Nosotros</a></li>
     <li><a href="#mensaje">Mensaje</a></li>
@@ -204,13 +446,13 @@
   <button class="mobile-close" onclick="toggleMenu()">✕</button>
   <a href="#fotos" onclick="toggleMenu()">Fotos</a>
   <a href="#videos" onclick="toggleMenu()">Videos</a>
+  <a href="#razones" onclick="toggleMenu()">Razones</a>
   <a href="#documento" onclick="toggleMenu()">Documento</a>
   <a href="#nosotros" onclick="toggleMenu()">Nosotros</a>
   <a href="#mensaje" onclick="toggleMenu()">Mensaje</a>
 </div>
 
-
-
+<!-- HERO -->
 <section id="hero">
   <div class="corazon-flotante">♥</div>
   <div class="corazon-flotante">卐</div>
@@ -218,15 +460,56 @@
   <div class="corazon-flotante">♥</div>
   <p class="hero-tagline">para mi Osita</p>
   <h1 class="hero-titulo">Para<br><span>JeiJei</span></h1>
-  <p class="hero-subtitulo">卐卐卐卐卐 con mucho amor 卐卐卐卐卐</p>
+  <p class="hero-subtitulo">卐卐 con mucho amor 卐卐</p>
   <div class="hero-linea"></div>
   <div id="personaje-container">
     <!-- Video: <video id="personaje-video" src="personaje.webm" muted playsinline></video> -->
     <!-- GIF:   <img src="personaje.gif" alt="personaje"> -->
   </div>
-  <div class="scroll-hint">DESLIZA PARA ABAJO</div>
+  <div class="scroll-hint">DESLIZA ABAJO</div>
 </section>
 
+<!-- CONTADOR COMPACTO -->
+<div id="contador">
+  <span class="cnt-label-inicio">juntos desde el 12 de noviembre del 2025 —</span>
+  <div class="cnt-grupo">
+    <span class="cnt-num" id="cnt-dias">0</span>
+    <span class="cnt-unit">días</span>
+  </div>
+  <span class="cnt-sep">·</span>
+  <div class="cnt-grupo">
+    <span class="cnt-num" id="cnt-horas">00</span>
+    <span class="cnt-unit">h</span>
+  </div>
+  <span class="cnt-sep">·</span>
+  <div class="cnt-grupo">
+    <span class="cnt-num" id="cnt-min">00</span>
+    <span class="cnt-unit">m</span>
+  </div>
+  <span class="cnt-sep">·</span>
+  <div class="cnt-grupo">
+    <span class="cnt-num" id="cnt-seg">00</span>
+    <span class="cnt-unit">s</span>
+  </div>
+</div>
+
+<!-- CITA -->
+<div id="cita">
+  <div class="reveal" style="max-width:700px;margin:0 auto;">
+    <span class="cita-comilla">"</span>
+    <p class="cita-texto" id="citaTexto">te quiero asi como eres con todo lo bueno que no ves y con todo lo malo que dices tener.</p>
+    <p class="cita-autor" id="citaAutor">— Alo para JeiJei</p>
+
+    <!-- Botones y puntos -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:20px;margin-top:28px;">
+      <button onclick="cambiarCita(-1)" style="background:none;border:1px solid rgba(192,21,42,0.4);border-radius:50%;width:36px;height:36px;color:var(--rojo-claro);font-size:1rem;transition:background 0.3s;" onmouseenter="this.style.background='rgba(192,21,42,0.2)'" onmouseleave="this.style.background='none'">‹</button>
+      <div id="citaPuntos" style="display:flex;gap:8px;align-items:center;"></div>
+      <button onclick="cambiarCita(1)" style="background:none;border:1px solid rgba(192,21,42,0.4);border-radius:50%;width:36px;height:36px;color:var(--rojo-claro);font-size:1rem;transition:background 0.3s;" onmouseenter="this.style.background='rgba(192,21,42,0.2)'" onmouseleave="this.style.background='none'">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOTOS -->
 <section id="fotos" style="max-width:1200px;margin:0 auto;padding:100px 40px;">
   <div class="reveal">
     <h2 class="seccion-titulo">Nuestros <span>momentos</span></h2>
@@ -237,40 +520,49 @@
   </div>
   <div class="galeria-grid">
     <div class="galeria-item reveal">
-      <img src="img1.jpg" alt="Nosotros">
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="img1.jpg" alt="Nosotros">
       <div class="galeria-overlay"><span>nuestra primera foto</span></div>
     </div>
     <div class="galeria-item reveal" style="transition-delay:0.1s">
-      <img src="img3.jpg" alt="Nosotros">
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="img3.jpg" alt="Nosotros">
       <div class="galeria-overlay"><span>me gustan tus ojitos</span></div>
     </div>
     <div class="galeria-item reveal" style="transition-delay:0.2s">
-      <img src="img51.jpg" alt="Nosotros">
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="img51.jpg" alt="Nosotros">
       <div class="galeria-overlay"><span>foto en la casa de tu amiga xd</span></div>
     </div>
     <div class="galeria-item reveal" style="transition-delay:0.15s">
-      <img src="img4.jpg" alt="Nosotros">
-      <div class="galeria-overlay"><span>me gusta como nos vemos aca</span></div>
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="img4.jpg" alt="Nosotros">
+      <div class="galeria-overlay"><span>me gusta como nos vemos acá</span></div>
     </div>
     <div class="galeria-item reveal" style="transition-delay:0.25s">
-      <img src="img6.jpg" alt="Nosotros">
-      <div class="galeria-overlay"><span>asi empezo nuestro albún de fotos</span></div>
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="img6.jpg" alt="Nosotros">
+      <div class="galeria-overlay"><span>asi empezo el albun de fotos</span></div>
     </div>
     <div class="galeria-item reveal" style="transition-delay:0.3s">
-      <img src="img7.jpg" alt="Nosotros">
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="img7.jpg" alt="Nosotros">
       <div class="galeria-overlay"><span>te amo amore mio</span></div>
     </div>
     <div class="galeria-item foto-panoramica-media reveal" style="transition-delay:0.35s">
-      <img src="p11.jpeg" alt="Nosotros">
-      <div class="galeria-overlay"><span>nuestro juego, un bonito recuerdo</span></div>
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="p11.jpeg" alt="Nosotros">
+      <div class="galeria-overlay"><span>nuestro juego un bonito recuerdo</span></div>
     </div>
     <div class="galeria-item foto-panoramica-full reveal" style="transition-delay:0.4s">
-      <img src="imgx1.jpg" alt="Nosotros">
-      <div class="galeria-overlay"><span>La niña de mis ojos y el principe azul</span></div>
+      <div class="marco-esquinas"></div>
+      <img class="galeria-foto" src="imgx1.jpg" alt="Nosotros">
+      <div class="galeria-overlay"><span>"la niña de mis ojos y el principe azul"</span></div>
     </div>
   </div>
 </section>
 
+<!-- VIDEOS -->
 <section id="videos">
   <div class="reveal">
     <h2 class="seccion-titulo">Nuestra <span>danza</span></h2>
@@ -285,9 +577,7 @@
       <div class="video-info">
         <p class="video-numero">Video 01</p>
         <h3 class="video-titulo">Nuestro primer baile</h3>
-        <p class="video-desc">La primera vez que bailamos juntos fue algo que jamás voy a olvidar. Me gustó muchísimo, de hecho, siento que no existen palabras suficientes para describir lo que pasó ese día. Fue simplemente hermoso. Cada momento quedó grabado en mi memoria, especialmente ese beso que me diste despues de bailar, fue tan especial que sé que lo recordaré siempre.
-Te amo, mi JeiJei. También recuerdo cuando te vi bailar Boquita de miel… bailaste tan bien que no podía dejar de mirarte. Fue uno de esos momentos en los que uno solo quiere detener el tiempo y quedarse ahí para siempre.
-Y después, nuestra llamada tras la presentación… fue el cierre perfecto para un día tan bonito. Son recuerdos que guardo con mucho cariño en mi corazón.</p>
+        <p class="video-desc">La primera vez que bailamos juntos fue algo que jamás voy a olvidar. Me gustó muchísimo, de hecho, siento que no existen palabras suficientes para describir lo que pasó ese día. Fue simplemente hermoso. Cada momento quedó grabado en mi memoria, especialmente ese beso que me diste despues de bailar, fue tan especial que sé que lo recordaré siempre. Te amo, mi JeiJei. También recuerdo cuando te vi bailar Boquita de miel… bailaste tan bien que no podía dejar de mirarte. Fue uno de esos momentos en los que uno solo quiere detener el tiempo y quedarse ahí para siempre. Y después, nuestra llamada tras la presentación… fue el cierre perfecto para un día tan bonito. Son recuerdos que guardo con mucho cariño en mi corazón.</p>
         <span class="video-label">Danza folclórica</span>
       </div>
     </div>
@@ -296,11 +586,7 @@ Y después, nuestra llamada tras la presentación… fue el cierre perfecto para
       <div class="video-info">
         <p class="video-numero">Video 02</p>
         <h3 class="video-titulo">Kullawada</h3>
-        <p class="video-desc">Nunca te lo dije, pero yo le rogué a Abel Nina para que pudiéramos cambiar de lugar y así tener la oportunidad de bailar contigo. No sabes cuánto insistí… de verdad lo intenté muchas veces. Pero al final me dijo que no, y hubo un momento en el que entendí que ya no podía hacer nada para que bailáramos juntos esa danza que te prometí: la kullawada.
-
-No sabes cuánto me dolió no poder bailarla contigo, no poder ser tu pareja en ese momento como lo había imaginado. Era algo que de verdad quería compartir contigo, algo que llevaba en el corazón. Y creo que una parte de mí siempre sentirá ese pequeño dolor por no haber podido cumplir esa promesa.
-
-Porque te amo… y cuando amas a alguien, incluso los momentos que no se pudieron vivir se quedan guardados muy dentro.</p>
+        <p class="video-desc">Nunca te lo dije, pero yo le rogué a Abel Nina para que pudiéramos cambiar de lugar y así tener la oportunidad de bailar contigo. No sabes cuánto insistí… de verdad lo intenté muchas veces. Pero al final me dijo que no, y hubo un momento en el que entendí que ya no podía hacer nada para que bailáramos juntos esa danza que te prometí: la kullawada. No sabes cuánto me dolió no poder bailarla contigo, no poder ser tu pareja en ese momento como lo había imaginado. Era algo que de verdad quería compartir contigo, algo que llevaba en el corazón. Y creo que una parte de mí siempre sentirá ese pequeño dolor por no haber podido cumplir esa promesa. Porque te amo… y cuando amas a alguien, incluso los momentos que no se pudieron vivir se quedan guardados muy dentro.</p>
         <span class="video-label">Danza folclórica</span>
       </div>
     </div>
@@ -309,17 +595,61 @@ Porque te amo… y cuando amas a alguien, incluso los momentos que no se pudiero
       <div class="video-info">
         <p class="video-numero">Video 03</p>
         <h3 class="video-titulo">Un video con mucho amor</h3>
-        <p class="video-desc">Si no recuerdo mal, eran como las 3 de la mañana… y yo seguía despierto pensando en ti. Pensaba en tus ojitos, en tu sonrisa, en todo lo que me haces sentir. Entonces vi mi guitarra ahí, descansando, y en ese momento decidí dedicarte una canción.
-
-Elegí “La Cantarina”, una canción que en lo personal me gusta muchísimo. Pero más que nada, me gusta la idea de dedicártela a ti, amore mío, porque cuando la toco o la escucho, inevitablemente pienso en ti.
-
-La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana, cuando el mundo está en silencio…yo seguire pensando en ti .</p>
+        <p class="video-desc">Si no recuerdo mal, eran como las 3 de la mañana… y yo seguía despierto pensando en ti. Pensaba en tus ojitos, en tu sonrisa, en todo lo que me haces sentir. Entonces vi mi guitarra ahí, descansando, y en ese momento decidí dedicarte una canción. Elegí “La Cantarina”, una canción que en lo personal me gusta muchísimo. Pero más que nada, me gusta la idea de dedicártela a ti, amore mío, porque cuando la toco o la escucho, inevitablemente pienso en ti. La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana, cuando el mundo está en silencio…yo seguire pensando en ti .</p>
         <span class="video-label">Video</span>
       </div>
     </div>
   </div>
 </section>
 
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="reveal">
+    <h2 class="seccion-titulo">Nuestra <span>historia</span></h2>
+    <p class="seccion-subtitulo">los momentos que nos trajeron hasta aquí</p>
+  </div>
+  <div class="divider reveal">
+    <div class="divider-line"></div><span class="divider-icon">♥</span><div class="divider-line"></div>
+  </div>
+  <div class="timeline-lista reveal">
+    <div class="timeline-item">
+      <div class="timeline-punto"></div>
+      <div class="timeline-content">
+        <p class="timeline-fecha">24 sept 2025</p>
+        <h3 class="timeline-titulo">El inicio de todo</h3>
+        <p class="timeline-desc">Esa noche nos conocimos por primera vez.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-punto"></div>
+      <div class="timeline-content">
+        <p class="timeline-fecha">22 de noviembre</p>
+        <h3 class="timeline-titulo">El primer baile juntos</h3>
+        <p class="timeline-desc">Cuando nos presentamos por primera vez.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-punto"></div>
+      <div class="timeline-content">
+        <p class="timeline-fecha">12 de noviembre</p>
+        <h3 class="timeline-titulo">Nuestro primer beso</h3>
+        <p class="timeline-desc">cuando el profe nos vio jaja</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-punto"></div>
+      <div class="timeline-content">
+        <p class="timeline-fecha">feria navideña</p>
+        <h3 class="timeline-titulo">La un bonito momento</h3>
+        <p class="timeline-desc">nos vimos ese rato un dia pero lo importante es el recuerdo y yo me acuerdo que fui porque tu participaste jaja</p>
+      </div>
+    </div>
+   
+  </div>
+</section>
+
+<!-- PDF -->
 <section id="documento">
   <div class="reveal">
     <h2 class="seccion-titulo">Un <span>documento</span> especial</h2>
@@ -339,12 +669,11 @@ La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana
       </div>
       <a href="pol.pdf" class="pdf-btn" download>↓ Descargar</a>
     </div>
-    <div class="pdf-viewer">
-      <iframe src="pol.pdf#toolbar=0"></iframe>
-    </div>
+    <div class="pdf-viewer"><iframe src="pol.pdf#toolbar=0"></iframe></div>
   </div>
 </section>
 
+<!-- NOSOTROS -->
 <section id="nosotros">
   <div class="reveal">
     <h2 class="seccion-titulo">Ellos <span>dos</span></h2>
@@ -362,10 +691,10 @@ La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana
       </div>
       <div class="columna-body">
         <div class="columna-item"><div class="columna-bullet"></div><p>Mi Jei Jei</p></div>
-        <div class="columna-item"><div class="columna-bullet"></div><p>Fiel al Barcelona (espoiler que tendras algo en tu cumpleaños por eso :O)</p></div>
-        <div class="columna-item"><div class="columna-bullet"></div><p>le gusta morder (eso me gusta)</p></div>
+        <div class="columna-item"><div class="columna-bullet"></div><p>Fiel al Barcelona (hay sorpresa en tu cumpleaños por eso :O)</p></div>
+        <div class="columna-item"><div class="columna-bullet"></div><p>Le gusta morder (eso me gusta)</p></div>
         <div class="columna-item"><div class="columna-bullet"></div><p>Apoya al Führer osea Hitler (tambien me gusta eso xd)</p></div>
-        <div class="columna-item"><div class="columna-bullet"></div><p>lee BL xd</p></div>
+        <div class="columna-item"><div class="columna-bullet"></div><p>Lee BL xd</p></div>
       </div>
       <div class="columna-imgs">
         <div class="columna-img-item"><img src="a1.jpeg" alt="JeiJei"></div>
@@ -397,6 +726,7 @@ La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana
   </div>
 </section>
 
+<!-- MENSAJE -->
 <section id="mensaje">
   <div class="mensaje-fondo"></div>
   <div class="reveal">
@@ -412,29 +742,24 @@ La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana
     </div>
     <p class="mensaje-firma">— echo con mucho amor :D, Alo</p>
   </div>
-  <!-- Pega esto justo antes de </section> en #mensaje -->
-<div style="display:flex;justify-content:center;margin-top:50px;" class="reveal">
-  <div style="
-    border: 3px solid var(--rojo);
-    border-radius: 8px;
-    overflow: hidden;
-    width: 140px;
-    box-shadow: 0 0 30px rgba(192,21,42,0.4);
-    transition: transform 0.3s;
-  " onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
-    <img src="fdj.jfif" alt="Frenkie de Jong" style="width:100%;display:block;filter:sepia(10%);">
-    <div style="
-      background: var(--rojo);
-      padding: 6px 10px;
-      text-align: center;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.6rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: white;
-    ">21</div>
+
+  <div class="pie-fotos reveal" style="transition-delay:0.2s">
+    <div class="pie-foto-card">
+      <div class="marco-esquinas"></div>
+      <img src="fdj.jfif" alt="Frenkie de Jong">
+      <div class="pie-foto-label">#21</div>
+    </div>
+    <div class="pie-foto-card">
+      <div class="marco-esquinas"></div>
+      <img src="REO.jpg" alt="Barça">
+      <div class="pie-foto-label">reo</div>
+    </div>
+    <div class="pie-foto-card">
+      <div class="marco-esquinas"></div>
+      <img src="iam.jpeg" alt="Barça">
+      <div class="pie-foto-label">yo xd</div>
+    </div>
   </div>
-</div>
 </section>
 
 <footer>
@@ -442,6 +767,7 @@ La pongo aquí para que nunca se te olvide que, incluso a las tres de la mañana
 </footer>
 
 <script>
+// CURSOR
 const cursor=document.getElementById('cursor');
 const ring=document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
@@ -453,15 +779,140 @@ function animCursor(){
   requestAnimationFrame(animCursor);
 }
 animCursor();
-document.querySelectorAll('a,button,.galeria-item,.video-card').forEach(el=>{
+document.querySelectorAll('a,button,.galeria-item,.video-card,.pie-foto-card').forEach(el=>{
   el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='56px';ring.style.height='56px';});
   el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
 });
+
+// MENÚ
 function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+
+// REVEAL
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
 },{threshold:0.1,rootMargin:'0px 0px -60px 0px'});
 document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>observer.observe(el));
+
+// CONTADOR
+function actualizarContador(){
+  const inicio=new Date('2025-11-12T00:17:00');
+  const ahora=new Date();
+  const diff=ahora-inicio;
+  document.getElementById('cnt-dias').textContent=Math.floor(diff/86400000);
+  document.getElementById('cnt-horas').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+  document.getElementById('cnt-min').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  document.getElementById('cnt-seg').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+}
+actualizarContador();
+setInterval(actualizarContador,1000);
+
+// MÚSICA + CONTROL DE VIDEOS
+let musicaActiva=false;
+const audio=document.getElementById('bgMusic');
+const btn=document.getElementById('music-btn');
+const barra=document.getElementById('musicBarra');
+const todosLosVideos=()=>document.querySelectorAll('video:not(#personaje-video)');
+
+// Cuando arranca un video → pausa música y pausa los demás videos
+todosLosVideos().forEach(vid=>{
+  vid.addEventListener('play',()=>{
+    // Pausar música de fondo
+    if(musicaActiva){
+      audio.pause();
+      btn.textContent='▶';
+      barra.classList.add('paused');
+      musicaActiva=false;
+    }
+    // Pausar todos los demás videos
+    todosLosVideos().forEach(otro=>{
+      if(otro!==vid && !otro.paused) otro.pause();
+    });
+  });
+});
+
+function toggleMusic(){
+  if(musicaActiva){
+    audio.pause();
+    btn.textContent='▶';
+    barra.classList.add('paused');
+  } else {
+    // Pausar todos los videos antes de reproducir música
+    todosLosVideos().forEach(v=>v.pause());
+    audio.play().catch(()=>{});
+    btn.textContent='⏸';
+    barra.classList.remove('paused');
+  }
+  musicaActiva=!musicaActiva;
+}
+
+// CITAS ROTATIVAS
+const citas = [
+  { t: "Puede que solo seas una persona en el mundo, pero para mí tú eres mi mundo.", a: "— Alo" },
+  { t: "Eres la persona a la que no le tuve miedo al inicio del ballet...", a: "— Jei" },
+  { t: "Te contaré una hermosa historia de amor, pero primero hay que vivirla.", a: "— Alo" },
+  { t: "...Contigo estoy viviendo todo tipo de experiencias y no quiero que sea solo una experiencia; yo quiero que sea para toda la vida. Sé que habrá problemas y yo los enfrentaré porque te amo.", a: "— Jei" },
+  { t: "No es lo que me haces sentir, es lo que no puedo sentir por nadie más.", a: "— Alo" },
+  { t: "Te amo, no pienses lo contrario, por favor.", a: "— Jei" },
+  { t: "Aceptaré mi destino en este universo y en otros, pero que sea contigo.", a: "— Alo" },
+];
+let citaIdx=0;
+let autoTimer=null;
+
+function renderPuntos(){
+  const cont=document.getElementById('citaPuntos');
+  cont.innerHTML='';
+  citas.forEach((_,i)=>{
+    const p=document.createElement('span');
+    p.style.cssText=`display:block;width:${i===citaIdx?'20px':'8px'};height:8px;border-radius:4px;background:${i===citaIdx?'var(--rojo-claro)':'rgba(192,21,42,0.3)'};transition:all 0.4s ease;`;
+    cont.appendChild(p);
+  });
+}
+
+function animarCita(direccion){
+  const el=document.getElementById('citaTexto');
+  const au=document.getElementById('citaAutor');
+  const salida=direccion>0?'-20px':'20px';
+  const entrada=direccion>0?'20px':'-20px';
+
+  el.style.transition='opacity 0.4s ease, transform 0.4s ease';
+  au.style.transition='opacity 0.4s ease, transform 0.4s ease';
+  el.style.opacity='0'; el.style.transform=`translateY(${salida})`;
+  au.style.opacity='0'; au.style.transform=`translateY(${salida})`;
+
+  setTimeout(()=>{
+    el.textContent=citas[citaIdx].t;
+    au.textContent=citas[citaIdx].a;
+    el.style.transition='none'; au.style.transition='none';
+    el.style.transform=`translateY(${entrada})`; au.style.transform=`translateY(${entrada})`;
+    renderPuntos();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      el.style.transition='opacity 0.5s ease, transform 0.5s ease';
+      au.style.transition='opacity 0.5s ease, transform 0.5s ease';
+      el.style.opacity='1'; el.style.transform='translateY(0)';
+      au.style.opacity='1'; au.style.transform='translateY(0)';
+    }));
+  },420);
+}
+
+function cambiarCita(dir){
+  citaIdx=(citaIdx+dir+citas.length)%citas.length;
+  animarCita(dir);
+  // Reiniciar el auto-timer al hacer click
+  clearInterval(autoTimer);
+  autoTimer=setInterval(()=>{
+    citaIdx=(citaIdx+1)%citas.length;
+    animarCita(1);
+  },5000);
+}
+
+// Iniciar puntos y auto-timer
+renderPuntos();
+autoTimer=setInterval(()=>{
+  citaIdx=(citaIdx+1)%citas.length;
+  animarCita(1);
+},5000);
+
+// PERSONAJE CON SCROLL
 const personajeVideo=document.getElementById('personaje-video');
 if(personajeVideo){
   personajeVideo.pause();
@@ -470,6 +921,8 @@ if(personajeVideo){
     personajeVideo.currentTime=(window.scrollY/scrollMax)*personajeVideo.duration;
   });
 }
+
+// PARALLAX HERO
 window.addEventListener('scroll',()=>{
   const y=window.scrollY;
   const hero=document.getElementById('hero');
